@@ -1,39 +1,35 @@
-import React from "react";
-import { AssistantSmartAppData } from "@sberdevices/assistant-client";
-import {
-  PageComponent,
-  PlasmaApp,
-} from "@sberdevices/plasma-temple";
+import React from 'react';
+import { PageComponent, PlasmaApp, Action } from '@sberdevices/plasma-temple';
 
 export type PlasmaAppProps = React.ComponentPropsWithoutRef<typeof PlasmaApp>;
 
-export type AppHeaderProps = PlasmaAppProps["header"];
-export type AssistantProps = PlasmaAppProps["assistantParams"];
-export type OnStartFn = PlasmaAppProps["onStart"];
+export type AppHeaderProps = PlasmaAppProps['header'];
+export type AssistantProps = PlasmaAppProps['assistantParams'];
+export type OnStartFn = PlasmaAppProps['onStart'];
 
+export enum Screen {
+    Search = 'search',
+}
 export interface PageState {
-  main: {};
+    main: {};
+    [Screen.Search]: {};
 }
 
-export interface PageParams {}
-
-export type PageComponentProps<K extends keyof PageState> =
-  React.ComponentProps<PageComponent<PageState, K, PageParams>>;
-
-export enum CatalogGalleryType {
-  CATEGORIES = "categories",
-  POPULAR = "popular",
+export interface PageParams {
+    [Screen.Search]: void;
 }
+
+export type PageComponentProps<K extends keyof PageState> = React.ComponentProps<
+    PageComponent<PageState, K, PageParams>
+>;
 
 export enum ActionType {
-  Search = "Search",
+    Search = 'Search',
 }
 
-export type AssistantAction = {
-  type: ActionType.Search;
-  payload: { query: string };
-};
-
-export interface AssistantDataAction extends AssistantSmartAppData {
-  smart_app_data: AssistantAction;
+interface ActionPayload<T extends ActionType, P extends Record<string, unknown> = any> {
+    type: T;
+    payload: P extends void ? never : P;
 }
+
+export type AssistantDataAction = Action<ActionPayload<ActionType.Search, { query: string }>>;

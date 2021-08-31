@@ -1,4 +1,4 @@
-import { ApiHandler } from "../src/types/server";
+import { ApiHandler } from '../src/types/server';
 
 const handler: ApiHandler = (req, res) => {
     const { name = 'World' } = req.query;
