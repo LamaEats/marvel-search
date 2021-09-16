@@ -1,0 +1,69 @@
+{
+  "intents": {
+    "/Hero": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "персонаж @Hero"
+        },
+        {
+          "type": "pattern",
+          "rule": "герой @Hero"
+        },
+        {
+          "type": "pattern",
+          "rule": "герой комиксов @Hero"
+        },
+        {
+          "type": "pattern",
+          "rule": "@Hero"
+        }
+      ],
+      "variables": {}
+    }
+  },
+  "entities": {
+    "Hero": {
+      "noMorph": false,
+      "matchers": [
+        {
+          "type": "synonyms",
+          "rule": [
+            "deadpool",
+            "дэдпул",
+            "дедпул"
+          ],
+          "value": "{\n  \"id\": 1009268,\n\"query\": \"deadpool\"\n}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "iron man",
+            "айрон мен",
+            "айрон мэн",
+            "железный человек"
+          ],
+          "value": "{\n  \"id\": 1009368,\n  \"query\": \"iron man\"\n}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "captain america",
+            "капитан америка"
+          ],
+          "value": "{\n  \"id\": 1009220,\n  \"query\": \"captain america\"\n}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "groot",
+            "грут",
+            "бревно",
+            "дерево"
+          ],
+          "value": "{\n  \"id\": 1010743,\n\"query\": \"groot\"\n}"
+        }
+      ]
+    }
+  }
+}

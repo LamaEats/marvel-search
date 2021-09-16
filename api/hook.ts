@@ -1,6 +1,7 @@
-import { ApiHandler } from '../src/types/server';
+import { ApiHandler, ScenarioRequest } from '../scenario/server';
 import { v4 as uuid } from 'uuid';
-
+import { config as dotEnvConfig } from 'dotenv';
+import path from 'path';
 import {
     createUserScenario,
     createSystemScenario,
@@ -10,16 +11,25 @@ import {
 } from '@salutejs/scenario';
 import { SaluteMemoryStorage } from '@salutejs/storage-adapter-memory';
 
-import { noMatchHandler, runAppHandler } from './handlers';
+import { noMatchHandler, runAppHandler, handlers } from '../scenario/handlers';
+import { SmartAppBrainRecognizer } from '@salutejs/recognizer-smartapp-brain';
 
-const userScenario = createUserScenario({});
+
+if (process.env.NODE_ENV === 'development') {
+    dotEnvConfig({
+        path: path.resolve(__dirname, '.env.local') 
+    })
+}
+
+console.log(process.env)
 
 const scenarioWalker = createScenarioWalker({
     systemScenario: createSystemScenario({
         RUN_APP: runAppHandler,
         NO_MATCH: noMatchHandler,
     }),
-    userScenario,
+    userScenario: createUserScenario<ScenarioRequest>(handlers),
+    recognizer: new SmartAppBrainRecognizer(process.env.SMARTAPP_BRAIN_TOKEN),
 });
 
 const storage = new SaluteMemoryStorage();

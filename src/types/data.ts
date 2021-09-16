@@ -27,12 +27,12 @@ interface Url {
     type: string;
     url: string;
 }
-interface Image {
+export interface Image {
     path: string;
     extension: string;
 }
 
-interface Character {
+export interface Character {
     id: number;
     name: string;
     description: string;
@@ -66,7 +66,7 @@ interface SeriesSummary {
     resourceURI: string;
     name: string;
 }
-interface Comic {
+export interface Comic {
     id: number;
     digitalId: number;
     title: string;
@@ -132,7 +132,7 @@ interface CharacterSummary {
     name: string;
     role: string;
 }
-interface Event {
+export interface Event {
     id: number;
     title: string;
     description: string;
@@ -151,7 +151,7 @@ interface Event {
     previous: EventSummary;
 }
 
-interface Series {
+export interface Series {
     id: number;
     title: string;
     description: string;
@@ -171,7 +171,7 @@ interface Series {
     previous: SeriesSummary;
 }
 
-interface Story {
+export interface Story {
     id: number;
     title: string;
     description: string;
@@ -187,7 +187,7 @@ interface Story {
     originalissue: ComicSummary;
 }
 
-interface Creator {
+export interface Creator {
     id: number;
     firstName: string;
     middleName: string;
