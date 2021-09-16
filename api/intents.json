@@ -1,0 +1,736 @@
+{
+  "intents": {
+    "/RunApp": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "запусти рубиновый кубик демо"
+        },
+        {
+          "type": "phrase",
+          "rule": "запусти разработка кубик"
+        },
+        {
+          "type": "phrase",
+          "rule": "запусти рубиновый кубик черновик"
+        },
+        {
+          "type": "phrase",
+          "rule": "открой рубиновый кубик демо"
+        },
+        {
+          "type": "phrase",
+          "rule": "открой демо кубики"
+        },
+        {
+          "type": "phrase",
+          "rule": "открой куб рубика"
+        }
+      ],
+      "variables": {}
+    },
+    "/Order": {
+      "matchers": [],
+      "variables": {}
+    },
+    "/Order/RecipientInfo": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "[Добавить|внести|изменить|ввести] [данные] получателя"
+        }
+      ],
+      "variables": {}
+    },
+    "/Order/Payment": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "выполнить оплату [заказа]"
+        },
+        {
+          "type": "pattern",
+          "rule": "к оплате [заказа]"
+        },
+        {
+          "type": "pattern",
+          "rule": "оплатить [заказ]"
+        }
+      ],
+      "variables": {}
+    },
+    "/Order/Delivery": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "(Изменить|добавить) способ доставки"
+        },
+        {
+          "type": "pattern",
+          "rule": "(Изменить|добавить) доставку"
+        }
+      ],
+      "variables": {}
+    },
+    "/Form": {
+      "matchers": [],
+      "variables": {}
+    },
+    "/Navigation": {
+      "matchers": [],
+      "variables": {}
+    },
+    "/Navigation/OpenMain": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "открой главную"
+        },
+        {
+          "type": "phrase",
+          "rule": "покажи главную"
+        },
+        {
+          "type": "phrase",
+          "rule": "вернись на главную"
+        },
+        {
+          "type": "phrase",
+          "rule": "вернуться в магазин"
+        }
+      ],
+      "variables": {}
+    },
+    "/Navigation/OpenVideos": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "Хочу научиться собирать кубик рубика"
+        },
+        {
+          "type": "phrase",
+          "rule": "Открой как собрать кубик рубика"
+        },
+        {
+          "type": "phrase",
+          "rule": "Покажи как собрать кубик рубика"
+        },
+        {
+          "type": "phrase",
+          "rule": "Перейди в как собрать кубик рубика"
+        },
+        {
+          "type": "pattern",
+          "rule": "(открой|покажи|перейди в) [как] (собрать|собирать) [кубик] [рубик|рубика]"
+        },
+        {
+          "type": "pattern",
+          "rule": "Хочу научится собирать [кубик] [рубика|рубик]"
+        }
+      ],
+      "variables": {}
+    },
+    "/Navigation/OpenLegalInfo": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "юридическая информация"
+        },
+        {
+          "type": "phrase",
+          "rule": "открой юридическую информацию"
+        },
+        {
+          "type": "phrase",
+          "rule": "покажи юридическую информацию"
+        },
+        {
+          "type": "phrase",
+          "rule": "юридические данные"
+        }
+      ],
+      "variables": {}
+    },
+    "/Navigation/OpenCart": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "(открой|покажи|перейди в) корзину"
+        }
+      ],
+      "variables": {}
+    },
+    "/Cart": {
+      "matchers": [],
+      "variables": {}
+    },
+    "/Cart/AddToCart": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "(добавь|положи) (@duckling.number [штук] [в корзину] | [@duckling.number] в корзину | в корзину @duckling.number [штук])"
+        }
+      ],
+      "variables": {
+        "quantity": {
+          "required": true,
+          "questions": []
+        }
+      }
+    },
+    "/Cart/ChangeQuantityPlus": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "добавь @duckling.number"
+        },
+        {
+          "type": "pattern",
+          "rule": "(ещё|увеличь на|хочу ещё|добавь ещё|добавь) [@duckling.number] [@Goods] [в корзину]"
+        }
+      ],
+      "variables": {
+        "quantity": {
+          "required": true,
+          "questions": []
+        },
+        "product": {
+          "required": true,
+          "questions": []
+        }
+      }
+    },
+    "/Navigation/OpenCatalog": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "(перейди в|покажи|открой|вернись в) каталог [товаров]"
+        }
+      ],
+      "variables": {}
+    },
+    "/Navigation/OpenDelivery": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "перейди в доставку"
+        },
+        {
+          "type": "phrase",
+          "rule": "открой доставку"
+        },
+        {
+          "type": "phrase",
+          "rule": "покажи доставку"
+        },
+        {
+          "type": "phrase",
+          "rule": "расскажи о доставке"
+        },
+        {
+          "type": "phrase",
+          "rule": "доставка"
+        }
+      ],
+      "variables": {}
+    },
+    "/Navigation/OpenContacts": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "открой контакты"
+        },
+        {
+          "type": "phrase",
+          "rule": "перейди в контакты"
+        },
+        {
+          "type": "phrase",
+          "rule": "покажи контакты"
+        },
+        {
+          "type": "phrase",
+          "rule": "контакты"
+        }
+      ],
+      "variables": {}
+    },
+    "/Navigation/OpenAddresses": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "адреса"
+        },
+        {
+          "type": "phrase",
+          "rule": "открой адреса"
+        },
+        {
+          "type": "phrase",
+          "rule": "перейди в адреса"
+        },
+        {
+          "type": "phrase",
+          "rule": "покажи адреса"
+        }
+      ],
+      "variables": {}
+    },
+    "/Form/Phone": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "@duckling.phone-number"
+        }
+      ],
+      "variables": {
+        "phone": {
+          "required": true,
+          "questions": []
+        }
+      }
+    },
+    "/Form/Date": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "@duckling.date"
+        }
+      ],
+      "variables": {
+        "date": {
+          "required": true,
+          "questions": []
+        }
+      }
+    },
+    "/Cart/ChangeQuantityMinus": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "(уменьши на|меньше на|удали|удали ещё) @duckling.number [@Goods] [из корзины]"
+        }
+      ],
+      "variables": {
+        "quantity": {
+          "required": true,
+          "questions": []
+        },
+        "product": {
+          "required": true,
+          "questions": []
+        }
+      }
+    },
+    "/Navigation/OpenItemByIndex": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "Покажи @duckling.ordinal"
+        },
+        {
+          "type": "phrase",
+          "rule": "Открой @duckling.ordinal"
+        },
+        {
+          "type": "phrase",
+          "rule": "Покажи @duckling.number"
+        },
+        {
+          "type": "phrase",
+          "rule": "Открой @duckling.number"
+        }
+      ],
+      "variables": {
+        "number": {
+          "required": true,
+          "questions": []
+        },
+        "ordinal": {
+          "required": true,
+          "questions": []
+        }
+      }
+    },
+    "/Cart/RemoveFromCart": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "(удали|убери) [@Goods|товар] [из корзины]"
+        }
+      ],
+      "variables": {
+        "goods": {
+          "required": true,
+          "questions": []
+        }
+      }
+    },
+    "/Navigation/OpenGoods": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "Открой @Goods"
+        },
+        {
+          "type": "phrase",
+          "rule": "Покажи @Goods"
+        }
+      ],
+      "variables": {
+        "product": {
+          "required": true,
+          "questions": []
+        }
+      }
+    },
+    "/Navigation/OpenAbout": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "открой о магазине"
+        },
+        {
+          "type": "phrase",
+          "rule": "расскажи о магазине"
+        },
+        {
+          "type": "phrase",
+          "rule": "покажи о магазине"
+        },
+        {
+          "type": "phrase",
+          "rule": "покажи о интернет магазине"
+        },
+        {
+          "type": "phrase",
+          "rule": "открой о интернет магазине"
+        },
+        {
+          "type": "phrase",
+          "rule": "расскажи о интернет магазине"
+        },
+        {
+          "type": "phrase",
+          "rule": "перейди о интернет магазине"
+        },
+        {
+          "type": "phrase",
+          "rule": "перейди о магазине"
+        }
+      ],
+      "variables": {}
+    },
+    "/ConfirmReject": {
+      "matchers": [],
+      "variables": {}
+    },
+    "/ConfirmReject/Confirm": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "[Да|Ок][,] [все] (верно|подтверждаю)"
+        },
+        {
+          "type": "pattern",
+          "rule": "(Ок|Да)"
+        }
+      ],
+      "variables": {}
+    },
+    "/ConfirmReject/Reject": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "Нет"
+        },
+        {
+          "type": "pattern",
+          "rule": "[Нет] (ввести (другое|другую|другие|снова|по новой|заново)|не подходит|неверно|повторить ввод)"
+        }
+      ],
+      "variables": {}
+    },
+    "/Cart/ClearCart": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "очисти корзину"
+        },
+        {
+          "type": "pattern",
+          "rule": "удали все [из корзины]"
+        }
+      ],
+      "variables": {}
+    },
+    "/Cart/MakeOrder": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "купить"
+        },
+        {
+          "type": "pattern",
+          "rule": "(оформить|оформи) [заказ]"
+        }
+      ],
+      "variables": {}
+    },
+    "/Navigation/OpenCatalogCategory": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "открой @Category"
+        },
+        {
+          "type": "phrase",
+          "rule": "покажи @Category"
+        }
+      ],
+      "variables": {
+        "category": {
+          "required": true,
+          "questions": []
+        }
+      }
+    },
+    "/ConfirmReject/Skip": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "Пропустить"
+        },
+        {
+          "type": "phrase",
+          "rule": "Скипнуть"
+        }
+      ],
+      "variables": {}
+    },
+    "/Form/Name": {
+      "matchers": [
+        {
+          "type": "phrase",
+          "rule": "@pymorphy.name @pymorphy.surn "
+        },
+        {
+          "type": "phrase",
+          "rule": "@pymorphy.surn @pymorphy.name"
+        },
+        {
+          "type": "phrase",
+          "rule": "@pymorphy.name @pymorphy.patr @pymorphy.surn "
+        },
+        {
+          "type": "phrase",
+          "rule": "@pymorphy.surn @pymorphy.name @pymorphy.patr"
+        }
+      ],
+      "variables": {
+        "name": {
+          "required": true,
+          "questions": [
+            "Введите имя"
+          ]
+        },
+        "surname": {
+          "required": true,
+          "questions": [
+            "Введите фамилию"
+          ]
+        },
+        "patronymic": {
+          "required": true,
+          "questions": []
+        }
+      }
+    }
+  },
+  "entities": {
+    "Category": {
+      "noMorph": false,
+      "matchers": [
+        {
+          "type": "synonyms",
+          "rule": [
+            "Кубики Рубика два на два",
+            "два на два",
+            "два два",
+            "2x2",
+            "Кубики два на два"
+          ],
+          "value": "{\n  \"name\": \"Кубики 2x2\",\n  \"id\": \"860e9fe4-fc87-46a4-97dd-1224cdadf916\"\n}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "Кубики Рубика три на три",
+            "три на три",
+            "три три",
+            "3x3",
+            "Кубики три на три"
+          ],
+          "value": "{\n  \"name\": \"Кубики 3x3\",\n  \"id\": \"b77b276e-96e0-4145-81d1-6e6d5b771187\"\n}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "Кубики Рубика четыре на четыре",
+            "четыре на четыре",
+            "четыре четыре",
+            "4x4",
+            "Кубики четыре на четыре"
+          ],
+          "value": "{\n  \"name\": \"Кубики 4x4\",\n  \"id\": \"fde05ed8-c913-4498-a4ea-e899817edbbe\"\n}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "Головоломки"
+          ],
+          "value": "{\n  \"name\": \"Головоломки\",\n  \"id\": \"d387f8ff-ee08-4951-98b0-e133360b4ef1\"\n}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "Популярные",
+            "Популярные товары"
+          ],
+          "value": "{\n  \"id\": \"popular\"\n}"
+        }
+      ]
+    },
+    "Goods": {
+      "noMorph": false,
+      "matchers": [
+        {
+          "type": "synonyms",
+          "rule": [
+            "Gan 2x2x2 251M"
+          ],
+          "value": "{\"id\":\"55198\",\"name\":\"Gan 2x2x2 251M\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "Gan 356 RS 3x3x3"
+          ],
+          "value": "{\"id\":\"59283\",\"name\":\"Gan 356 RS 3x3x3\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "Gan 460M 4x4x4"
+          ],
+          "value": "{\"id\":\"23326\",\"name\":\"Gan 460M 4x4x4\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "MoYu 2x2x2 MeiLong Magnetic"
+          ],
+          "value": "{\"id\":\"63826\",\"name\":\"MoYu 2x2x2 MeiLong Magnetic\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "MoYu 4x4x4 MeiLong"
+          ],
+          "value": "{\"id\":\"53550\",\"name\":\"MoYu 4x4x4 MeiLong\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "MoYu 4x4x4 MeiLong Macaron"
+          ],
+          "value": "{\"id\":\"64785\",\"name\":\"MoYu 4x4x4 MeiLong Macaron\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "MoYu 4x4x4 MeiLong Magnetic"
+          ],
+          "value": "{\"id\":\"63830\",\"name\":\"MoYu 4x4x4 MeiLong Magnetic\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe 2x2x2 QiDi Jelly"
+          ],
+          "value": "{\"id\":\"41685\",\"name\":\"QiYi MoFangGe 2x2x2 QiDi Jelly\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe 3x3x3 Sail W"
+          ],
+          "value": "{\"id\":\"54032\",\"name\":\"QiYi MoFangGe 3x3x3 Sail W\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe 3x3x3 YongShi Warrior W"
+          ],
+          "value": "{\"id\":\"3545\",\"name\":\"QiYi MoFangGe 3x3x3 YongShi Warrior W\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe 4x4x4 QiYuan (S) v2"
+          ],
+          "value": "{\"id\":\"65384\",\"name\":\"QiYi MoFangGe 4x4x4 QiYuan (S) v2\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe Pyraminx QiMing"
+          ],
+          "value": "{\"id\":\"3573\",\"name\":\"QiYi MoFangGe Pyraminx QiMing\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe Pyraminx QiMing A"
+          ],
+          "value": "{\"id\":\"3574\",\"name\":\"QiYi MoFangGe Pyraminx QiMing A\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe Pyraminx QiMing A Подарочный комплект"
+          ],
+          "value": "{\"id\":\"6499\",\"name\":\"QiYi MoFangGe Pyraminx QiMing A Подарочный комплект\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe Pyraminx QiMing Jelly"
+          ],
+          "value": "{\"id\":\"41695\",\"name\":\"QiYi MoFangGe Pyraminx QiMing Jelly\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe Pyraminx QiMing Подарочный комплект"
+          ],
+          "value": "{\"id\":\"6497\",\"name\":\"QiYi MoFangGe Pyraminx QiMing Подарочный комплект\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "QiYi MoFangGe X-Man Pyraminx Magnetic BELL v2"
+          ],
+          "value": "{\"id\":\"62043\",\"name\":\"QiYi MoFangGe X-Man Pyraminx Magnetic BELL v2\"}"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "YJ 2x2x2 RuiPo"
+          ],
+          "value": "{\"id\":\"41617\",\"name\":\"YJ 2x2x2 RuiPo\"}"
+        }
+      ]
+    }
+  }
+}

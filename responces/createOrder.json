@@ -1,0 +1,143 @@
+{
+    "messageId": 1630925540054,
+    "sessionId": "9730b313-3e85-3e94-bc28-42e1c8c54d9b",
+    "messageName": "SERVER_ACTION",
+    "payload": {
+        "new_session": false,
+        "strategies": {
+            "last_call": null
+        },
+        "character": {
+            "id": "sber",
+            "name": "Сбер",
+            "gender": "male",
+            "appeal": "official"
+        },
+        "server_action": {
+            "type": "CALL_SCENARIO",
+            "payload": {
+                "type": "createOrder"
+            }
+        },
+        "applicationId": "7f811e36-8665-43d5-9771-f2793b4e99b6",
+        "appversionId": "c3e29139-36a9-43ed-948e-b4aaf139ffa1",
+        "projectName": "4bb7746f-f934-400f-8313-e47db18da36e",
+        "device": {
+            "platformType": "WEBDBG",
+            "platformVersion": "1.0",
+            "surface": "SBERBOX",
+            "surfaceVersion": "2.16.1",
+            "features": {
+                "appTypes": [
+                    "DIALOG",
+                    "WEB_APP"
+                ]
+            },
+            "capabilities": {
+                "screen": {
+                    "available": true,
+                    "height": 1080,
+                    "width": 1920
+                },
+                "speak": {
+                    "available": true
+                }
+            },
+            "deviceId": "",
+            "deviceManufacturer": "",
+            "deviceModel": "",
+            "additionalInfo": {
+                "host_app_id": "ru.sberbank.sdakit.demo",
+                "sdk_version": "20.09.1.3576"
+            }
+        },
+        "app_info": {
+            "projectId": "c95ce934-1687-4361-b468-936a70b6da61",
+            "applicationId": "7f811e36-8665-43d5-9771-f2793b4e99b6",
+            "appversionId": "c3e29139-36a9-43ed-948e-b4aaf139ffa1",
+            "systemName": null,
+            "frontendEndpoint": "https://30cff520-0ee5-46af-991a-3b15b3173f55.static.developer.sberdevices.ru",
+            "frontendType": "WEB_APP",
+            "ageLimit": 0
+        },
+        "meta": {
+            "current_app": {
+                "app_info": {
+                    "projectId": "c95ce934-1687-4361-b468-936a70b6da61",
+                    "applicationId": "7f811e36-8665-43d5-9771-f2793b4e99b6",
+                    "appversionId": "c3e29139-36a9-43ed-948e-b4aaf139ffa1",
+                    "frontendEndpoint": "https://30cff520-0ee5-46af-991a-3b15b3173f55.static.developer.sberdevices.ru",
+                    "frontendType": "WEB_APP",
+                    "frontendStateId": "c95ce934-1687-4361-b468-936a70b6da61_7f811e36-8665-43d5-9771-f2793b4e99b6_c3e29139-36a9-43ed-948e-b4aaf139ffa1",
+                    "appearance": {
+                        "header": {
+                            "title": "4bb7746f-f934-400f-8313-e47db18da36e"
+                        }
+                    },
+                    "ageLimit": 0
+                },
+                "state": {
+                    "screen": "makeOrder",
+                    "item_selector": {
+                        "items": []
+                    },
+                    "order": {
+                        "items": [
+                            {
+                                "id": 23326,
+                                "name": "Gan 460M 4x4x4",
+                                "quantity": 1,
+                                "price": "3410",
+                                "imageSrc": "https://cccstore.ru/upload/iblock/6da/6da2ccfb1afa95922f9ed461234a6dcc.jpg"
+                            },
+                            {
+                                "id": 63826,
+                                "name": "MoYu 2x2x2 MeiLong Magnetic",
+                                "quantity": 1,
+                                "price": "400",
+                                "imageSrc": "https://cccstore.ru/upload/iblock/5e5/5e5b34235add44941557f7cef6833d89.jpg"
+                            }
+                        ],
+                        "quantity": 2,
+                        "price": 3810,
+                        "minDeliveryPrice": 0
+                    },
+                    "recipientInfo": {
+                        "recipient": {
+                            "name": "",
+                            "phone": "+7",
+                            "email": "",
+                            "address": {
+                                "city": "",
+                                "street": "",
+                                "house": "",
+                                "flat": ""
+                            }
+                        }
+                    }
+                }
+            },
+            "time": {},
+            "location": {},
+            "features": {
+                "screen": {
+                    "enabled": true
+                },
+                "int_login": {
+                    "enabled": true
+                },
+                "demo_mode": {
+                    "enabled": false
+                }
+            }
+        },
+        "client_profile": {
+            "aggregated_data": {}
+        }
+    },
+    "uuid": {
+        "userId": "webdbg_userid_vffru7okymklrk0yt7lfjr",
+        "sub": "5O14UgQ18+3zvhE0vNCrMbhD6ZX9Sz7FVpFdsBVuDOYMLPAUxFCEcSaKexLvQQGymQtXyGJdmGfJTjy9zHf4968slJm5bWRgucWwcviro5Jj5EnTKUeHoayeq1iCqzebYogQCZZlnSELoADT9c0JzLzVr3CcZCiuJX/TdnlLaAY=",
+        "userChannel": "B2C"
+    }
+}
