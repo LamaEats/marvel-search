@@ -14,7 +14,7 @@ const endpoint = ([s]: TemplateStringsArray): string => {
         base = process.env.CCCSTORE_API_TEST;
     }
 
-    return `/${base}/${s}/`;
+    return `/${base}/${s}`;
 };
 
 interface Endpoints {
@@ -26,9 +26,9 @@ interface Endpoints {
 }
 
 export const endpoints: Endpoints = {
-    create: endpoint`create`,
-    cancel: endpoint`cancel`,
-    paymentStatus: endpoint`payment/status_paid`,
-    paymentCancel: endpoint`payment/status_cancel`,
-    token: endpoint`token`,
-}
+    create: endpoint`sale/order/create/`,
+    cancel: endpoint`sale/order/cancel/`,
+    paymentStatus: endpoint`sale/order/payment/status_paid/`,
+    paymentCancel: endpoint`sale/order/payment/status_cancel/`,
+    token: endpoint`token/`,
+};

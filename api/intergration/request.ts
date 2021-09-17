@@ -1,19 +1,9 @@
-import https from 'http';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import { isTest } from '../utils';
 import { endpoints } from './endpoints';
 
 import { access } from '../handlers/access'
-import { Response, TokenResponse } from './types';
-
-const originalRequest = https.request;
-
-https.request = function wrapMethodRequest(...args) {
-    console.log('========== OUTGOING REQUEST ===========')
-    console.log(args[0]);
- 
-    return originalRequest.call(this, ...args as Parameters<typeof originalRequest>);
-}
+import { Response } from './types';
 
 export const request = axios.create({
     baseURL: process.env.CCCSTORE_API_BASE_URL,
@@ -36,6 +26,18 @@ const getCredentials = (): Credentials => {
     };
     return credentials as NonNullable<Credentials>;
 };
+
+export const isAxiosError = <T>(error: unknown): error is AxiosError<T> => {
+    if (!(error instanceof Error)) {
+        return false;
+    }
+
+    if ('isAxiosError' in error) {
+        return (error as AxiosError).isAxiosError
+    }
+
+    return false;
+}
 
 export const getToken = () => {
     return new Promise((resolve, reject) => {
@@ -60,61 +62,21 @@ export const getToken = () => {
             resolve(undefined);
         }, reject)
     })
-    // const { login, password } = getCredentials();
-    // console.log(login, password);
-
-    // axios.post(endpoints.token, {
-    //     client_login: login,
-    //     client_password: password,
-    // }, {
-    //     baseURL: process.env.CCCSTORE_API_BASE_URL,
-    // }).then((res) => {
-    //     const {
-    //         data: { status, data, errors },
-    //     } = res;
-
-    //     if (status === 'success') {
-    //         access.value = data.token;
-    //     } else {
-    //         Promise.reject(errors[0].message);
-    //     }
-    // })
-    // try {
-    //     const {
-    //         data: { status, data, errors },
-    //     } = await axios.post<TokenResponse>(endpoints.token, {
-    //         client_login: login,
-    //         client_password: password,
-    //     }, {
-    //         baseURL: process.env.CCCSTORE_API_BASE_URL
-    //     });
-
-    //     if (status === 'success') {
-    //         access.value = data.token;
-    //     } else {
-    //         Promise.reject(errors[0].message)
-    //     }
-    // } catch (error) {
-    //     Promise.reject(error);
-    // }
-
-    // Promise.resolve();
 }
 
-// request.interceptors.request.use(async (config) => {
-//     if ((config.method || '').toUpperCase() === 'POST') {
-//         try {
-//             if (!access.value) {
-//                 await getToken();
-//             }
-//         }
-//         catch(error) {
-//             throw error
-//         }
-//     }
+request.interceptors.request.use(async (config) => {
+    if (config.url && !config.url.includes('token')) {
+        await getToken();
 
-//     return Promise.resolve(config)
-// })
+        // Подклеиваем токен в тело запроса
+        config.data = {
+            ...config.data,
+            token: access.value,
+        };
+    }
+
+    return config;
+})
 
 request.interceptors.response.use((response: AxiosResponse<Response>) => {
     console.log('========== RESPONSE ===========')

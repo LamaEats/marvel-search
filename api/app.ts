@@ -8,8 +8,6 @@ import { SaluteMemoryStorage } from '@salutejs/storage-adapter-memory';
 import { SmartAppBrainRecognizer } from '@salutejs/recognizer-smartapp-brain';
 
 import { systemScenario, userScenario, intents } from './scenario';
-import { ServerAction } from './types';
-// import { IncomingRequest, OutcomingResponse } from './types';
 
 dotEnv({
     path: path.resolve(__dirname, '..', 'config.env'),
@@ -36,27 +34,6 @@ const makeDir = () => {
     })
 }
 
-const writeJSONRequest = async <T>(val:T, name: string): Promise<void> => {
-    console.log(__dirname);
-    const dir = path.resolve(__dirname, '..', 'responces');
-
-    if (!fs.existsSync(dir)) {
-        await makeDir();
-    }
-
-    if (fs.existsSync(`${dir}/${name}.json`)) {
-        return;
-    }
-
-    fs.writeFile(`${dir}/${name}.json`, JSON.stringify(val, null, 4), {
-        encoding: 'utf-8',
-    }, (error) => {
-        if (error != null) {
-            console.error(error);
-        }
-    })
-}
-
 
 module.exports = async (request: VercelRequest, response: VercelResponse) => {
     if (request.method === 'GET') {
@@ -71,13 +48,9 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
     const sessionId = body.uuid.userId || v4();
     const session = await storage.resolve(sessionId);
 
-    // if (req.serverAction && 'payload' in req.serverAction) {
-    //     const action = req.serverAction.payload as ServerAction;
-    //     console.log('WRITE JSON CALL for: ', action.type)
-    //     writeJSONRequest(request.body, action.type);
-    // }
-
-    // console.log('Session', session);
+    if (req.serverAction) {
+        console.log(req.serverAction);
+    }
 
     await scenarioWalker({ req, res, session });
     await storage.save({ id: sessionId, session });
