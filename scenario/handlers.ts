@@ -37,7 +37,6 @@ const searchAction: HandlerConfig = {
     match: oneOf(action(ActionType.Search), intent('/Hero')),
     handle: async ({ req, res }) => {
         let query: string;
-        
 
         if (req.serverAction) {
             const { payload } = req.serverAction;

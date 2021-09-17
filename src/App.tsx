@@ -2,7 +2,7 @@ import React from 'react';
 import { PlasmaApp, Page } from '@sberdevices/plasma-temple';
 import { AssistantProps } from '@sberdevices/plasma-temple/dist/assistant';
 
-import { AppHeaderProps, OnStartFn, Screen } from './types/types';
+import { AppHeaderProps, Screen } from './types/types';
 
 const assistantParams: Partial<AssistantProps> = {
     initPhrase: 'запусти мой герой',
@@ -19,12 +19,8 @@ const Search = Page.lazy(() => import('./pages/Search'));
 const Results = Page.lazy(() => import('./pages/Results'));
 const Content = Page.lazy(() => import('./pages/Content'));
 
-const onStart: OnStartFn = ({ pushScreen }) => {
-    // @ts-ignore
-    pushScreen(Screen.Search);
-}
 export const App: React.FC = () => (
-    <PlasmaApp assistantParams={assistantParams as AssistantProps} header={headerProps} onStart={onStart}>
+    <PlasmaApp assistantParams={assistantParams as AssistantProps} header={headerProps}>
         <Page name={Screen.Search} component={Search} />
         <Page name={Screen.Results} component={Results} />
         <Page name={Screen.Content} component={Content} />

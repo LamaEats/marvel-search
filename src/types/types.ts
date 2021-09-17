@@ -12,6 +12,7 @@ export enum Screen {
     Search = 'search',
     Results = 'results',
     Content = 'content',
+    Detail = 'Detail',
 }
 
 export enum ActionType {
@@ -19,6 +20,7 @@ export enum ActionType {
     Results = 'Results',
     Content = 'Content',
     ContentMore = 'ContentMore',
+    Detail = 'Detail',
 }
 
 export type AvailableContent = Array<{
@@ -46,6 +48,7 @@ export interface PageState {
     [Screen.Search]: {};
     [Screen.Results]: ResultsScreenState;
     [Screen.Content]: ContentScreenState;
+    [Screen.Detail]: null;
 }
 
 export interface PageParams {
@@ -56,7 +59,7 @@ export type PageComponentProps<K extends keyof PageState> = React.ComponentProps
     PageComponent<PageState, K, PageParams>
 >;
 
-type ActionPayload<T extends ActionType, P extends Record<string, unknown> = any> = {
+type ActionPayload<T extends ActionType, P = unknown> = {
     type: T;
     payload: P extends void ? never : P;
 };
