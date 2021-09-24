@@ -30,9 +30,11 @@ export const createMediaUrl = (thumbnail: Image, size: Size): string => {
     let result: string;
     if (size === 'full_size') {
         result = `${thumbnail.path}.${thumbnail.extension}`;
+    } else {
+        result = `${thumbnail.path}/${size}.${thumbnail.extension}`;    
     }
 
-    result = `${thumbnail.path}/${size}.${thumbnail.extension}`;
+
 
     // avoid mixed content between resources
     return result.replace(/^(https?:)/, '');
