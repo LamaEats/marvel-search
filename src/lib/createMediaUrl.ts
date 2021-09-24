@@ -35,5 +35,5 @@ export const createMediaUrl = (thumbnail: Image, size: Size): string => {
     result = `${thumbnail.path}/${size}.${thumbnail.extension}`;
 
     // avoid mixed content between resources
-    return result.replace(/^(https?:)/, '');;
+    return result.replace(/^(https?:)/, '');
 };
