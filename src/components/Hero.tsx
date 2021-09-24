@@ -20,7 +20,7 @@ export const Hero: React.FC = () => {
 
     return (
         <FullScreenBackgroundWrapper>
-            <StyledBackgroundImage src={hero.hero.picture || ''} data-cy="background-image" />
+            <StyledBackgroundImage src={picture} data-cy="background-image" />
         </FullScreenBackgroundWrapper>
     );
 };
