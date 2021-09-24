@@ -10,11 +10,13 @@ const StyledBackgroundImage = styled.img`
 `;
 
 export const Hero: React.FC = () => {
-    const hero = React.useContext(HeroContext);
+    const { hero } = React.useContext(HeroContext);
 
-    if (!hero.hero.picture) {
+    if (!hero.picture) {
         return null;
     }
+    
+    const picture = hero.picture.replace(/^(https?:)/, '');
 
     return (
         <FullScreenBackgroundWrapper>
