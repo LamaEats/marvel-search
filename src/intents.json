@@ -1,5 +1,18 @@
 {
   "intents": {
+    "/HeroNumber": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "Покажи @HeroNumber"
+        },
+        {
+          "type": "pattern",
+          "rule": "Открой @HeroNumber"
+        }
+      ],
+      "variables": {}
+    },
     "/Hero": {
       "matchers": [
         {
@@ -62,6 +75,25 @@
             "дерево"
           ],
           "value": "{\n  \"id\": 1010743,\n\"query\": \"groot\"\n}"
+        }
+      ]
+    },
+    "HeroNumber": {
+      "noMorph": false,
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": [
+            "@duckling.number"
+          ],
+          "value": ""
+        },
+        {
+          "type": "pattern",
+          "rule": [
+            "@duckling.ordinal"
+          ],
+          "value": ""
         }
       ]
     }
