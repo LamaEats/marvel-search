@@ -1,20 +1,39 @@
-import { createIntents, createMatchers, SaluteHandler, SaluteRequest } from '@salutejs/scenario';
+import { AppState, createIntents, createMatchers, SaluteHandler, SaluteRequest, ScenarioSchema } from '@salutejs/scenario';
 import { GalleryCardParams } from '@sberdevices/plasma-temple';
 
 import { createMediaUrl } from '../src/lib/createMediaUrl';
 import { characterContent, search } from './network';
-import { HandlerConfig, ScenarioRequest } from './server';
+import {
+    ScenarioHandleSchema,
+    ScenarioHandleSchemaMap,
+    ScenarioRequest,
+    State,
+} from './types';
 import { ActionType, Screen } from '../src/types/types';
 
-import { intents } from '../src/intents.json'
+import { intents } from '../src/intents.json';
+import { Endpoint, EndpointResponse } from './endpoints';
+import assert from 'assert';
+import { cache } from './cache';
+import { CharacterDataWrapper } from '../src/types/data';
 
 const intentsMap = createIntents(intents);
 
-const { action, intent } = createMatchers<ScenarioRequest, typeof intentsMap>();
+const { action, intent, match, state } = createMatchers<ScenarioRequest, typeof intentsMap>();
 
-const oneOf = (...matchers: ((req: SaluteRequest) => boolean)[]) => (req: SaluteRequest): boolean => {
-    return matchers.some((matcher) => matcher(req));
-}
+const oneOf =
+    (...matchers: ((req: SaluteRequest) => boolean)[]) =>
+    (req: SaluteRequest): boolean => {
+        return matchers.some((matcher) => matcher(req));
+    };
+
+const stateGuard = (state?: AppState): state is Extract<State, AppState> => {
+    if (!state) {
+        return false;
+    }
+
+    return 'screen' in state;
+};
 
 export const runAppHandler: SaluteHandler = ({ res }) => {
     res.appendBubble('Начнем');
@@ -33,28 +52,35 @@ export const noMatchHandler: SaluteHandler = ({ res }) => {
     res.appendBubble('Я не понимаю');
 };
 
-const searchAction: HandlerConfig = {
+const searchAction: ScenarioHandleSchema<Endpoint.characters> = {
     match: oneOf(action(ActionType.Search), intent('/Hero')),
-    handle: async ({ req, res }) => {
+
+    apiCall: async (req) => {
         let query: string;
 
         if (req.serverAction) {
             const { payload } = req.serverAction;
-            if (!('search' in payload)) {
-                return;
-            }
+            assert(('search' in payload), 'Missed handler');
 
             query = payload.search;
         } else {
-            const val = JSON.parse(req.variant.slots[0].value) as { id: number; query: string }
+            const val = JSON.parse(req.variant.slots[0].value) as { id: number; query: string };
             query = val.query;
         }
+
+        return search({
+            name: query,
+        });
+    },
+
+    handle: async ({ req, res, apiResponse }) => {
+        assert(apiResponse, 'Error - No Content');
 
         const {
             data: {
                 results: [character],
             },
-        } = await search({ name: query });
+        } = apiResponse;
 
         const contentKeys: Array<keyof Pick<typeof character, 'comics' | 'series' | 'stories' | 'events'>> = [
             'comics',
@@ -71,7 +97,7 @@ const searchAction: HandlerConfig = {
             }
 
             return acc;
-        }, [] as Array<{ type: keyof Pick<typeof character, 'comics' | 'series' | 'stories' | 'events'>, count: number }>);
+        }, [] as Array<{ type: keyof Pick<typeof character, 'comics' | 'series' | 'stories' | 'events'>; count: number }>);
 
         const prepareData = {
             character: {
@@ -80,7 +106,6 @@ const searchAction: HandlerConfig = {
                 image: {
                     src: createMediaUrl(character.thumbnail, 'full_size'),
                 },
-
             },
             availableContent: items,
         };
@@ -92,18 +117,34 @@ const searchAction: HandlerConfig = {
     },
 };
 
-const contentAction: HandlerConfig = {
-    match: action(ActionType.Results),
-    handle: async ({ req, res }) => {
-        const { payload } = req.serverAction!;
+const contentAction: ScenarioHandleSchema<Endpoint.characterContent> = {
+    match: match(oneOf(action(ActionType.Results), intent('/HeroContent')), state({ screen: Screen.Results })),
+    apiCall: (req) => {
+        const { state } = req;
 
-        if (!('type' in payload)) {
-            return;
+        assert(stateGuard(state), 'Missed handler');
+
+        const character = state.character.id;
+        let type: string;
+
+        if (req.serverAction) {
+            const { payload } = req.serverAction;
+
+            type = payload.type;
+        } else {
+            const val = JSON.parse(req.variant.slots[0].value) as { type: string };
+            type = val.type;
         }
 
-        const { data } = await characterContent({ character: payload.id, type: payload.type });
+        return characterContent({ character, type });
+    },
+    handle: async ({ req, res }) => {
+        const apiResponse = cache.get(ActionType.Results) as Exclude<EndpointResponse[Endpoint], CharacterDataWrapper>;
+        assert(apiResponse, 'no cache');
 
-        const { results } = data;
+        const {
+            data: { results },
+        } = apiResponse;
 
         const cards: GalleryCardParams[] = results.map((result, index) => {
             return {
@@ -116,25 +157,41 @@ const contentAction: HandlerConfig = {
             };
         });
 
+        let type: string;
+
+        if (req.serverAction) {
+            const { payload } = req.serverAction;
+
+            type = payload.type;
+        } else {
+            const val = JSON.parse(req.variant.slots[0].value) as { type: string };
+            type = val.type;
+        }
+
         res.appendCommand({
             type: ActionType.Content,
             payload: {
-                type: payload.type,
+                type,
                 activeGalleryIndex: 0,
                 gallery: {
                     activeCardIndex: 0,
                     items: cards,
                 },
-            }
-        })
+            },
+        });
     },
-} 
+};
 
-const contentMoreAction: HandlerConfig = {
+const contentMoreAction: ScenarioHandleSchema<any> = {
     match: action(ActionType.ContentMore),
     handle: async ({ req, res }) => {
+        const { state } = req;
+
+        if (!stateGuard(state)) {
+            return;
+        }
+
         const { payload } = req.serverAction!;
-        // const { } = req.state;
 
         if (!('type' in payload)) {
             return;
@@ -147,7 +204,49 @@ const contentMoreAction: HandlerConfig = {
     },
 };
 
+const openFromItemSelector: ScenarioHandleSchema<any> = {
+    match: match(oneOf(intent('/HeroNumber')), state({ screen: Screen.Content })),
+    handle: async ({ req, res }) => {
+        console.log(req);
+    },
+};
+
 export const handlers = {
     [ActionType.Search]: searchAction,
     [ActionType.Results]: contentAction,
+    [ActionType.HeroNumber]: openFromItemSelector,
+    [ActionType.ContentMore]: contentMoreAction,
+};
+
+export const applyMiddlewares =
+    <T extends Endpoint>(...middlewares: Array<(ex: ScenarioHandleSchema<T>) => ScenarioHandleSchema<T>>) =>
+    (executer: ScenarioHandleSchema<T>): ScenarioHandleSchema<T> =>
+        middlewares.reduce((r, m) => m(r), executer);
+
+export const preprocessHandle = <K extends Endpoint>(map: ScenarioHandleSchemaMap<K>): ScenarioSchema => {
+    const nextMap: ScenarioSchema = {};
+    const keys = Object.keys(map) as ActionType[];
+    for (const key of keys) {
+        const handler = map[key];
+        const { apiCall, handle } = handler;
+
+        nextMap[key] = {
+            ...handler,
+            handle: async (opts, dispatch) => {
+                const { req } = opts;
+
+                if (apiCall) {
+                    cache.set(key, await apiCall(req));
+                }
+
+                await handle({
+                    ...opts,
+                    // @ts-ignore
+                    apiResponse: cache.get(key),
+                }, dispatch);
+            },
+        };
+    }
+
+    return map;
 };

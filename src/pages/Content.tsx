@@ -7,10 +7,11 @@ import {
     AssistantAppState,
 } from '@sberdevices/plasma-temple';
 
-import { ActionType, ContentScreenState, PageComponentProps, Screen } from '../types/types';
+import { ActionType, ContentScreenState, PageComponentProps, ScenarioAction, Screen } from '../types/types';
 import { Hero } from '../components/Hero';
 import { CardBody, CardMedia, CardBody1, Card, mediaQuery, CardBadge, CardContent } from '@sberdevices/plasma-ui';
 import styled, { css } from 'styled-components';
+import { useIntersection } from '../hooks/useIntersection';
 
 const StyledCard = styled(Card)`
     width: 392px;
@@ -37,9 +38,9 @@ const StyledCardIndex = styled(CardBadge)`
     left: 16px;
 `;
 
-const ContentCard: React.FC<GalleryCardProps> = ({ card, focused, index }) => {
+const ContentCard = React.forwardRef<HTMLDivElement, GalleryCardProps>(({ card, focused, index }, ref) => {
     return (
-        <StyledCard focused={focused} data-cy={`gallery-card-${index}`}>
+        <StyledCard focused={focused} data-cy={`gallery-card-${index}`} ref={ref}>
             <CardBody>
                 <CardMedia base="div" src={getMediaObjectSrc(card.image)} ratio="9 / 16" data-cy="gallery-card-media">
                     {card.position && (
@@ -52,7 +53,7 @@ const ContentCard: React.FC<GalleryCardProps> = ({ card, focused, index }) => {
             </CardBody>
         </StyledCard>
     );
-};
+});
 
 function createItemSelector(state: ContentScreenState): AssistantAppState {
     if (!Array.isArray(state.gallery)) {
@@ -69,24 +70,60 @@ function createItemSelector(state: ContentScreenState): AssistantAppState {
                     },
                 })),
             },
+            currentCount: state.gallery.items.length,
         };
     }
 
     return {
         item_selector: {
             items: [],
-        }
+        },
+        currentCount: 0,
     };
-    
 }
 
-export const Content: React.FC<PageComponentProps<Screen.Content>> = ({ header, changeState, state }) => {
+export const Content: React.FC<PageComponentProps<Screen.Content>> = ({ header, changeState, state, assistant }) => {
+    const intersectingRef = React.useRef<HTMLDivElement>(null);
     const onClickHandler = React.useCallback(() => {}, []);
 
     useAssistantAppState({
         screen: Screen.Content,
         ...createItemSelector(state),
     });
+
+    const lastIndex = React.useMemo(() => {
+        if (Array.isArray(state.gallery)) {
+            return 0;
+        }
+
+        return state.gallery.items.length;
+    }, [state.gallery]);
+
+    const onScrollBottom = React.useCallback(() => {
+        assistant?.sendAction<ScenarioAction>({
+            type: ActionType.ContentMore,
+            payload: {
+                offset: lastIndex,
+            },
+        }, (action) => {
+            if (action.type !== ActionType.ContentMore) {
+                return;
+            }
+            if (Array.isArray(state.gallery)) {
+                return;
+            }
+
+            changeState({
+                ...state,
+                gallery: {
+                    ...state.gallery,
+                    items: state.gallery.items.concat(action.payload)
+                }
+            })
+        });
+    }, [assistant, changeState, state, lastIndex]);
+
+    useIntersection(intersectingRef, onScrollBottom);
 
     return (
         <>
@@ -96,7 +133,9 @@ export const Content: React.FC<PageComponentProps<Screen.Content>> = ({ header, 
                 changeState={changeState}
                 state={state}
                 onCardClick={onClickHandler}
-                galleryCard={ContentCard}
+                galleryCard={(props) => {
+                    return <ContentCard {...props} ref={props.index === lastIndex ? intersectingRef : null} />;
+                }}
             />
         </>
     );

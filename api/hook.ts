@@ -9,8 +9,8 @@ import {
 import { SaluteMemoryStorage } from '@salutejs/storage-adapter-memory';
 import { SmartAppBrainRecognizer } from '@salutejs/recognizer-smartapp-brain';
 
-import { noMatchHandler, runAppHandler, handlers } from '../scenario/handlers';
-import { ApiHandler, ScenarioRequest } from '../scenario/server';
+import { noMatchHandler, runAppHandler, handlers, preprocessHandle } from '../scenario/handlers';
+import { ApiHandler, ScenarioRequest } from '../scenario/types';
 import '../scenario/loadConfig';
 
 const scenarioWalker = createScenarioWalker({
@@ -18,7 +18,7 @@ const scenarioWalker = createScenarioWalker({
         RUN_APP: runAppHandler,
         NO_MATCH: noMatchHandler,
     }),
-    userScenario: createUserScenario<ScenarioRequest>(handlers),
+    userScenario: createUserScenario(handlers),
     recognizer: new SmartAppBrainRecognizer(process.env.SMARTAPP_BRAIN_TOKEN),
 });
 

@@ -7,7 +7,7 @@ import './loadConfig';
 interface RequestGet {
     <T extends Endpoint>(path: T, defaultParams?: Partial<Params<T>>): (
         values: Partial<Params<T>>,
-    ) => Promise<EndpointResponse[typeof path]>;
+    ) => Promise<EndpointResponse[T]>;
 }
 
 const parseQuery = <Q extends string, V extends Record<any, any>>(query: Q, val: V): string => {
