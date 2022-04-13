@@ -18,7 +18,7 @@ const scenarioWalker = createScenarioWalker({
         RUN_APP: runAppHandler,
         NO_MATCH: noMatchHandler,
     }),
-    userScenario: createUserScenario(handlers),
+    userScenario: createUserScenario(preprocessHandle(handlers)),
     recognizer: new SmartAppBrainRecognizer(process.env.SMARTAPP_BRAIN_TOKEN),
 });
 
@@ -36,6 +36,9 @@ const handle: ApiHandler = async (request, response) => {
     } else {
         sessionId = uuid();
     }
+
+    console.log(process.env.DEBUG)
+    console.log('DEBUG IS ENABLED: ', require('debug').enabled('app:*'))
 
     const session = await storage.resolve(sessionId);
 

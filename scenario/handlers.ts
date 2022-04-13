@@ -16,6 +16,7 @@ import { Endpoint, EndpointResponse } from './endpoints';
 import assert from 'assert';
 import { cache } from './cache';
 import { CharacterDataWrapper } from '../src/types/data';
+import { hookLog } from './debug';
 
 const intentsMap = createIntents(intents);
 
@@ -46,7 +47,7 @@ export const runAppHandler: SaluteHandler = ({ res }) => {
         },
     });
 };
-
+// @ts-ignore
 export const noMatchHandler: SaluteHandler = ({ res }) => {
     res.setPronounceText('Я не понимаю');
     res.appendBubble('Я не понимаю');
@@ -73,8 +74,8 @@ const searchAction: ScenarioHandleSchema<Endpoint.characters> = {
         });
     },
 
-    handle: async ({ req, res, apiResponse }) => {
-        assert(apiResponse, 'Error - No Content');
+    handle: async ({ res, apiResponse }) => {
+        assert(apiResponse, 'No Content');
 
         const {
             data: {
@@ -236,7 +237,9 @@ export const preprocessHandle = <K extends Endpoint>(map: ScenarioHandleSchemaMa
                 const { req } = opts;
 
                 if (apiCall) {
+                    hookLog('call api from state')
                     cache.set(key, await apiCall(req));
+                    hookLog('set cached response by key', key);
                 }
 
                 await handle({
