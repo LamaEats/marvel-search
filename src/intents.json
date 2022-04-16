@@ -9,6 +9,10 @@
         {
           "type": "pattern",
           "rule": "Открой @HeroNumber"
+        },
+        {
+          "type": "pattern",
+          "rule": "(Открой|Покажи) @dukling.number"
         }
       ],
       "variables": {}
@@ -30,6 +34,15 @@
         {
           "type": "pattern",
           "rule": "@Hero"
+        }
+      ],
+      "variables": {}
+    },
+    "/HeroContent": {
+      "matchers": [
+        {
+          "type": "pattern",
+          "rule": "(Покажи|Открой|Хочу посмотреть) @HeroContent"
         }
       ],
       "variables": {}
@@ -75,6 +88,45 @@
             "дерево"
           ],
           "value": "{\n  \"id\": 1010743,\n\"query\": \"groot\"\n}"
+        }
+      ]
+    },
+    "HeroContent": {
+      "noMorph": false,
+      "matchers": [
+        {
+          "type": "synonyms",
+          "rule": [
+            "Серия",
+            "Серии",
+            "Список серий"
+          ],
+          "value": "{ \"type\": \"series\" }"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "История",
+            "Истории",
+            "Список историй"
+          ],
+          "value": "{ \"type\": \"stories\" }"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "Событие, События, Список событий"
+          ],
+          "value": "{ \"type\": \"events\" }"
+        },
+        {
+          "type": "synonyms",
+          "rule": [
+            "Комикс",
+            "Комиксы",
+            "Список комиксов"
+          ],
+          "value": "{ \"type\": \"comics\" }"
         }
       ]
     },

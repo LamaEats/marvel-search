@@ -3,11 +3,12 @@ import md5 from 'md5';
 
 import { Endpoint, EndpointResponse, Params } from './endpoints';
 import './loadConfig';
+import { httpLog } from './debug'
 
 interface RequestGet {
     <T extends Endpoint>(path: T, defaultParams?: Partial<Params<T>>): (
         values: Partial<Params<T>>,
-    ) => Promise<EndpointResponse[typeof path]>;
+    ) => Promise<EndpointResponse[T]>;
 }
 
 const parseQuery = <Q extends string, V extends Record<any, any>>(query: Q, val: V): string => {
@@ -89,6 +90,24 @@ httpClient.interceptors.request.use(
         throw error;
     },
 );
+
+httpClient.interceptors.request.use((config) => {
+    httpLog(`send requet to ${config.url}`);
+    httpLog('with params', config.params);
+    return config;
+}, (error) => {
+    httpLog('request error', error)
+    return error;
+})
+
+httpClient.interceptors.response.use((res) => {
+    httpLog('get response from', res.config.url)
+    httpLog('value', res.data);
+    return res;
+}, (error) => {
+    httpLog('response error', error.toJSON());
+    throw error;
+})
 
 export const get: RequestGet = (endpoint, defaultParams) => {
     return async (params) => {

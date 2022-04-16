@@ -1,11 +1,8 @@
 import React from "react";
+import { Hero } from "../types/types";
 
 export interface HeroContextImpl {
-    hero: {
-        picture: string | void;
-        id: number | void;
-        name: string | void;
-    };
+    hero: Hero;
     reset(): void;
 }
 

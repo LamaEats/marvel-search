@@ -3,11 +3,15 @@ import { PlasmaApp, Page } from '@sberdevices/plasma-temple';
 import { AssistantProps } from '@sberdevices/plasma-temple/dist/assistant';
 
 import { AppHeaderProps, Screen } from './types/types';
+import { detectDevice } from '@sberdevices/plasma-ui';
 
 const assistantParams: Partial<AssistantProps> = {
     initPhrase: 'запусти мой герой',
+    nativePanel: {
+        defaultText: 'Deadpool',
+    },
     token: process.env.REACT_APP_SMARTAPP_TOKEN ?? '',
-    userId: 'webdbg_userid_n16idhufgudncr37qttz3',
+    // userId: 'webdbg_userid_n16idhufgudncr37qttz3',
 };
 
 const headerProps: AppHeaderProps = {

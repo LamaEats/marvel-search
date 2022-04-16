@@ -36,10 +36,8 @@ type ParamsToUnion<TUrl> = TUrl extends `${string}{${infer N}:${infer T}}${infer
     ? [N, getTypeFromMap<T>] | ParamsToUnion<O>
     : never;
 type ParamsForNormalizedUrl<TUrl> = { [K in ParamsToUnion<TUrl> as K[0]]: K[1] };
-export type Params<TUrl> = ParamsForNormalizedUrl<NormalizeUrl<TUrl>>;
-export type ClearUrl<TUrl> = RemoveSymbolFromEnd<RemoveSymbolFromEnd<TUrl, `{${string}}`>, '?'>;
 
-export type QueryParams = `${string}:${string}`;
+export type Params<TUrl> = ParamsForNormalizedUrl<NormalizeUrl<TUrl>>;
 
 export enum Endpoint {
     characters = '/v1/public/characters?{name:string}',

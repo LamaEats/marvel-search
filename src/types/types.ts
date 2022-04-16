@@ -21,6 +21,13 @@ export enum ActionType {
     Content = 'Content',
     ContentMore = 'ContentMore',
     Detail = 'Detail',
+    HeroNumber = '/HeroNumber',
+}
+
+export interface Hero {
+    picture?: string | void;
+    id?: number | void;
+    name?: string | void;
 }
 
 export type AvailableContent = Array<{
@@ -67,6 +74,7 @@ type ActionPayload<T extends ActionType, P = unknown> = {
 export type AssistantDataAction =
     | Action<ActionPayload<ActionType.Search, { query: string }>>
     | Action<ActionPayload<ActionType.Results, ResultsScreenState>>
+    | Action<ActionPayload<ActionType.ContentMore, any>>
     | Action<ActionPayload<ActionType.Content, ContentScreenState>>;
 
 export type ScenarioAction = AssistantDataAction['smart_app_data'];
