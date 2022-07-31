@@ -1,9 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GalleryCardParams, GalleryCardProps, GalleryWithNavigation, Header, isSberBoxLike } from '@sberdevices/plasma-temple';
-import { Card, CardContent, CardContentProps, CardBody, Display3, CardHeadline3 } from '@sberdevices/plasma-ui';
+import {
+    Gallery,
+    GalleryNewCardProps,
+    Header,
+    isSberBoxLike,
+    SingleGalleryEntity,
+} from '@salutejs/plasma-temple';
+import { Card, CardContent, CardContentProps, CardBody, Display3, CardHeadline3 } from '@salutejs/plasma-ui';
 
-import { ActionType, PageComponentProps, ScenarioAction, Screen } from '../types/types';
+import {
+    ActionType,
+    PageComponentProps,
+    ScenarioAction,
+    Screen,
+    ContentTypes,
+    AvailableContentItem,
+} from '../types/types';
 import { Hero } from '../components/Hero';
 
 const cardWidth = isSberBoxLike() ? '392px' : '330px';
@@ -36,14 +49,14 @@ type StyledCardContentProps = CardContentProps & {
     backgroundImage?: string;
 };
 
-const ContentCard: React.FC<GalleryCardProps> = ({ card, focused }) => {
-    const isFocused = isSberBoxLike() && focused;
+type ContentCard = GalleryNewCardProps<ContentTypes, AvailableContentItem>;
 
+const ContentCard: React.FC<ContentCard> = ({ entity, isActive }) => {
     return (
-        <StyledCategoryCard focused={isFocused}>
+        <StyledCategoryCard focused={isActive}>
             <CardBody>
                 <StyledCardContent cover>
-                    <StyledCategoryName>{card.label}</StyledCategoryName>
+                    <StyledCategoryName>{entity.name}</StyledCategoryName>
                 </StyledCardContent>
             </CardBody>
         </StyledCategoryCard>
@@ -52,37 +65,46 @@ const ContentCard: React.FC<GalleryCardProps> = ({ card, focused }) => {
 
 
 const Results: React.FC<PageComponentProps<Screen.Results>> = ({ header, state, assistant, pushHistory }) => {
-    const itemsToRender: GalleryCardParams[] = React.useMemo(() => {
-        return state.availableContent.map((item, index) => ({
-            id: index,
-            label: item.type,
-            position: index + 1,
-            image: {
-                src: '',
-            },
-        }))
+    const itemsToRender: SingleGalleryEntity<ContentTypes, AvailableContentItem> = React.useMemo(() => {
+        return {
+            items: state.availableContent.map((item, index) => ({
+                id: item.type,
+                name: item.type as string,
+                position: index + 1,
+                image: {
+                    src: '',
+                },
+                ...item,
+            })),
+        };
     }, [state.availableContent]);
 
-    const onClickHandler = React.useCallback((val: GalleryCardParams) => {
-        assistant?.sendAction<ScenarioAction>({
-            type: ActionType.Results,
-            payload: {
-                type: val.label,
-                id: state.character.id,
-            }
-        }, (action) => {
-            if (action.type === ActionType.Content) {
-                pushHistory(Screen.Content, action.payload);
-            }
-        })
-    }, [assistant, pushHistory, state.character.id]);
+    const onClickHandler = React.useCallback(
+        (val: ContentCard['entity']) => {
+            assistant?.sendAction<ScenarioAction>(
+                {
+                    type: ActionType.Results,
+                    payload: {
+                        type: val.name,
+                        id: state.character.id,
+                    },
+                },
+                (action) => {
+                    if (action.type === ActionType.Content) {
+                        pushHistory(Screen.Content, action.payload);
+                    }
+                },
+            );
+        },
+        [assistant, pushHistory, state.character.id],
+    );
 
     return (
         <>
             <Hero />
             <Header {...header} />
             <Display3 mb="16x">{state.character.name}</Display3>
-            <GalleryWithNavigation items={itemsToRender} onItemClick={onClickHandler} Component={ContentCard} />
+            <Gallery autoFocus={isSberBoxLike()} items={itemsToRender} galleryCard={ContentCard} onCardClick={onClickHandler} />
         </>
     );
 };

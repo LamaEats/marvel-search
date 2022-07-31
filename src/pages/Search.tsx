@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActionType, AssistantDataAction, PageComponentProps, ScenarioAction, Screen } from '../types/types';
-import { Form, FormField, Header, Input, useAssistantOnSmartAppData, VoiceField } from '@sberdevices/plasma-temple';
+import { Form, FormField, Header, Input, useAssistantOnSmartAppData, VoiceField } from '@salutejs/plasma-temple';
 import { HeroContext } from '../context/hero';
 
 const SearchForm: React.FC<{ onSubmit: (...args: any) => void }> = ({ onSubmit }) => {
@@ -60,7 +60,7 @@ const Search: React.FC<PageComponentProps<Screen.Search>> = ({ header, assistant
         [actionHandler, assistant],
     );
 
-    useAssistantOnSmartAppData<AssistantDataAction>(actionHandler)
+    useAssistantOnSmartAppData(actionHandler)
     return (
         <>
             <Header {...header} />

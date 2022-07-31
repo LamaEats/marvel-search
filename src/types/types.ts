@@ -1,5 +1,10 @@
 import React from 'react';
-import { PageComponent, PlasmaApp, Action, GalleryPageState } from '@sberdevices/plasma-temple';
+import {
+    PageComponent,
+    PlasmaApp,
+    AssistantAction,
+    GalleryCardEntity,
+} from '@salutejs/plasma-temple';
 import { Character } from './data';
 
 export type PlasmaAppProps = React.ComponentPropsWithoutRef<typeof PlasmaApp>;
@@ -22,11 +27,13 @@ export enum ActionType {
     ContentMore = 'ContentMore',
     Detail = 'Detail',
 }
-
-export type AvailableContent = Array<{
-    type: keyof Pick<Character, 'comics' | 'events' | 'series' | 'stories'>;
+export type ContentTypes = keyof Pick<Character, 'comics' | 'events' | 'series' | 'stories'>
+export type AvailableContentItem = {
+    type: ContentTypes;
     count: number;
-}>;
+};
+
+export type AvailableContent = Array<AvailableContentItem>;
 
 export type ResultsScreenState = {
     character: {
@@ -40,8 +47,8 @@ export type ResultsScreenState = {
 }
 
 export type ContentScreenState = {
-    activeGalleryIndex: GalleryPageState['activeGalleryIndex'];
-    gallery: GalleryPageState['gallery'];
+    activeGalleryIndex: number;
+    items: GalleryCardEntity[];
 };
 
 export interface PageState {
@@ -59,14 +66,14 @@ export type PageComponentProps<K extends keyof PageState> = React.ComponentProps
     PageComponent<PageState, K, PageParams>
 >;
 
-type ActionPayload<T extends ActionType, P = unknown> = {
+interface Action<T extends ActionType, P extends Record<string, unknown>> extends AssistantAction {
     type: T;
     payload: P extends void ? never : P;
-};
+}
 
 export type AssistantDataAction =
-    | Action<ActionPayload<ActionType.Search, { query: string }>>
-    | Action<ActionPayload<ActionType.Results, ResultsScreenState>>
-    | Action<ActionPayload<ActionType.Content, ContentScreenState>>;
+    | Action<ActionType.Search, { query: string }>
+    | Action<ActionType.Results, ResultsScreenState>
+    | Action<ActionType.Content, ContentScreenState>;
 
-export type ScenarioAction = AssistantDataAction['smart_app_data'];
+export type ScenarioAction = AssistantDataAction;

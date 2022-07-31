@@ -1,5 +1,5 @@
 import { createIntents, createMatchers, SaluteHandler, SaluteRequest } from '@salutejs/scenario';
-import { GalleryCardParams } from '@sberdevices/plasma-temple';
+import { CardEntity, GalleryCardEntity } from '@salutejs/plasma-temple';
 
 import { createMediaUrl } from '../src/lib/createMediaUrl';
 import { characterContent, search } from './network';
@@ -105,13 +105,13 @@ const contentAction: HandlerConfig = {
 
         const { results } = data;
 
-        const cards: GalleryCardParams[] = results.map((result, index) => {
+        const cards: CardEntity[] = results.map((result, index) => {
             return {
                 image: {
                     src: createMediaUrl(result.thumbnail, 'portrait_uncanny'),
                 },
-                id: result.id,
-                label: result.title,
+                id: String(result.id),
+                name: result.title,
                 position: index + 1,
             };
         });
@@ -120,11 +120,7 @@ const contentAction: HandlerConfig = {
             type: ActionType.Content,
             payload: {
                 type: payload.type,
-                activeGalleryIndex: 0,
-                gallery: {
-                    activeCardIndex: 0,
-                    items: cards,
-                },
+                items: cards,
             }
         })
     },

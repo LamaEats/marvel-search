@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FullScreenBackgroundWrapper } from '@sberdevices/plasma-temple';
+import { FullScreenBackgroundWrapper } from '@salutejs/plasma-temple';
 import { HeroContext } from '../context/hero';
 
 const StyledBackgroundImage = styled.img`

@@ -1,13 +1,11 @@
 import React from 'react';
-import { PlasmaApp, Page } from '@sberdevices/plasma-temple';
-import { AssistantProps } from '@sberdevices/plasma-temple/dist/assistant';
+import { PlasmaApp, Page } from '@salutejs/plasma-temple';
 
-import { AppHeaderProps, Screen } from './types/types';
+import { AppHeaderProps, AssistantProps, Screen } from './types/types';
 
 const assistantParams: Partial<AssistantProps> = {
     initPhrase: 'запусти мой герой',
     token: process.env.REACT_APP_SMARTAPP_TOKEN ?? '',
-    userId: 'webdbg_userid_n16idhufgudncr37qttz3',
 };
 
 const headerProps: AppHeaderProps = {

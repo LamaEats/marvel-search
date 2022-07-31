@@ -1,16 +1,19 @@
 import React from 'react';
+import { CardBody, CardMedia, CardBody1, Card, mediaQuery, CardBadge, CardContent } from '@salutejs/plasma-ui';
+import styled, { css } from 'styled-components';
 import {
-    GalleryCardProps,
-    GalleryPage,
     getMediaObjectSrc,
     useAssistantAppState,
     AssistantAppState,
-} from '@sberdevices/plasma-temple';
+    Gallery,
+    SingleGalleryEntity,
+    isSberBoxLike,
+    GalleryNewCardProps,
+    Header,
+} from '@salutejs/plasma-temple';
 
 import { ActionType, ContentScreenState, PageComponentProps, Screen } from '../types/types';
 import { Hero } from '../components/Hero';
-import { CardBody, CardMedia, CardBody1, Card, mediaQuery, CardBadge, CardContent } from '@sberdevices/plasma-ui';
-import styled, { css } from 'styled-components';
 
 const StyledCard = styled(Card)`
     width: 392px;
@@ -37,17 +40,17 @@ const StyledCardIndex = styled(CardBadge)`
     left: 16px;
 `;
 
-const ContentCard: React.FC<GalleryCardProps> = ({ card, focused, index }) => {
+const ContentCard: React.FC<GalleryNewCardProps> = ({ entity, isActive, index }) => {
     return (
-        <StyledCard focused={focused} data-cy={`gallery-card-${index}`}>
+        <StyledCard focused={isActive} data-cy={`gallery-card-${index}`}>
             <CardBody>
-                <CardMedia base="div" src={getMediaObjectSrc(card.image)} ratio="9 / 16" data-cy="gallery-card-media">
-                    {card.position && (
-                        <StyledCardIndex view="secondary" size="l" circled text={String(card.position)} />
+                <CardMedia base="div" src={getMediaObjectSrc(entity.image)} ratio="9 / 16" data-cy="gallery-card-media">
+                    {entity.position && (
+                        <StyledCardIndex view="secondary" size="l" circled text={String(entity.position)} />
                     )}
                 </CardMedia>
                 <StyledCardContent cover>
-                    <CardBody1 lines={2}>{card.label}</CardBody1>
+                    <CardBody1 lines={2}>{entity.name}</CardBody1>
                 </StyledCardContent>
             </CardBody>
         </StyledCard>
@@ -55,11 +58,11 @@ const ContentCard: React.FC<GalleryCardProps> = ({ card, focused, index }) => {
 };
 
 function createItemSelector(state: ContentScreenState): AssistantAppState {
-    if (!Array.isArray(state.gallery)) {
+    if (Array.isArray(state.items)) {
         return {
             item_selector: {
-                items: state.gallery.items.map((item) => ({
-                    title: item.label,
+                items: state.items.map((item) => ({
+                    title: item.name,
                     number: item.position,
                     action: {
                         type: ActionType.Detail,
@@ -75,13 +78,17 @@ function createItemSelector(state: ContentScreenState): AssistantAppState {
     return {
         item_selector: {
             items: [],
-        }
+        },
     };
-    
 }
 
-export const Content: React.FC<PageComponentProps<Screen.Content>> = ({ header, changeState, state }) => {
-    const onClickHandler = React.useCallback(() => {}, []);
+export const Content: React.FC<PageComponentProps<Screen.Content>> = ({ header, state }) => {
+    // const onClickHandler = React.useCallback(() => {}, []);
+    const itemsToRender: SingleGalleryEntity = React.useMemo(() => {
+        return {
+            items: state.items,
+        };
+    }, [state.items]);
 
     useAssistantAppState({
         screen: Screen.Content,
@@ -91,13 +98,8 @@ export const Content: React.FC<PageComponentProps<Screen.Content>> = ({ header, 
     return (
         <>
             <Hero />
-            <GalleryPage
-                header={header}
-                changeState={changeState}
-                state={state}
-                onCardClick={onClickHandler}
-                galleryCard={ContentCard}
-            />
+            <Header {...header} />
+            <Gallery items={itemsToRender} galleryCard={ContentCard} autoFocus={isSberBoxLike()} />
         </>
     );
 };

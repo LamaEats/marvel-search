@@ -1,6 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { NLPRequest, SaluteHandler, SaluteRequest, SaluteRequestVariable, ScenarioSchema } from '@salutejs/scenario';
-import { AppState } from '@salutejs/types';
+import { AppState, NLPRequest, SaluteHandler, SaluteRequest, SaluteRequestVariable, ScenarioSchema } from '@salutejs/scenario';
 import { ActionType } from '../src/types/types';
 
 interface Request extends VercelRequest {

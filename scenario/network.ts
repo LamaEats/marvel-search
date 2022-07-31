@@ -15,13 +15,14 @@ const parseQuery = <Q extends string, V extends Record<any, any>>(query: Q, val:
         const [name, type] = key.split(':') as [keyof V, ...string[]];
 
         if (val[name]) {
+            const n = name as string;
             if (type && type !== 'custom') {
-                if (typeof val[name] !== type) {
-                    throw new TypeError(`'${name}' type not equals '${type}'`);
+                if (typeof val[n] !== type) {
+                    throw new TypeError(`'${n}' type not equals '${type}'`);
                 }
             }
 
-            return `${name}=${val[name]}`;
+            return `${n}=${val[n]}`;
         }
 
         return '';
@@ -40,19 +41,20 @@ export const replacePlaceholders = <T extends Endpoint, P extends Partial<Params
 
     cleanUrl = cleanUrl.replace(/{(.+?)}/gi, (_: string, key: string) => {
         const [name, type] = key.split(':') as [keyof P, ...string[]];
+        const n = name as string;
 
         const val = obj[name];
 
         if (val) {
             if (type && type !== 'custom') {
                 if (typeof val !== type) {
-                    throw new TypeError(`'${name}' type not equals '${type}'`);
+                    throw new TypeError(`'${n}' type not equals '${type}'`);
                 }
             }
 
             delete obj[name];
 
-            return val as string;
+            return val as unknown as string;
         }
 
         return '';
